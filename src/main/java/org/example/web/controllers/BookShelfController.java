@@ -33,8 +33,12 @@ public class BookShelfController {
 
     @PostMapping("/save")
     public String saveBook(Book book){
-        bookService.saveBook(book);
-        logger.info("current repository size: " + bookService.getAllBooks().size());
+        if(book.getTitle() == "" && book.getAuthor() == "" && book.getSize() == null)
+            logger.info("attempt to create an EMPTY book: creation canceled");
+        else {
+            bookService.saveBook(book);
+            logger.info("current repository size: " + bookService.getAllBooks().size());
+        }
         return "redirect:/books/shelf";
     }
 
