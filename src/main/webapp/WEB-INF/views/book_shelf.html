@@ -11,6 +11,11 @@
             transform: translate(-50%, -50%);
         }
 
+        #user_container{
+            position: absolute;
+            right: 10%;
+        }
+
         #books{
             width: 50%;
             border-collapse: collapse;
@@ -30,6 +35,11 @@
     </style>
 </head>
 <body>
+
+    <div id="user_container">
+        1234
+    </div>
+
     <div id="root_container">
         <form method="post" th:action="@{/books/save}" th:object="${book}">
             <table>
