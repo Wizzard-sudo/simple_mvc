@@ -3,6 +3,7 @@ package org.example.web.controllers;
 import org.apache.log4j.Logger;
 import org.example.app.services.BookService;
 import org.example.web.dto.Book;
+import org.example.web.dto.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,7 +48,9 @@ public class BookShelfController {
         if(bookService.removeBookById(bookIdToRemove)){
             return "redirect:/books/shelf";
         }else{
+            logger.info("entry does not exist");
             return "redirect:/books/shelf";
         }
     }
+
 }

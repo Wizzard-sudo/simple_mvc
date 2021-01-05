@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface LoginInterface<T> {
 
+    boolean authenticateUser(LoginForm loginForm);
+
     List<T> getAllUsers();
 
-    void addUser(LoginForm user);
+    boolean addUser(LoginForm user);
 
     boolean removeUserByName(String name);
 }

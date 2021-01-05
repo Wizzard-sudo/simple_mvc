@@ -9,8 +9,16 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+        #user_container{
+            position: absolute;
+            right: 5%;
+        }
         .login_item{
             margin-bottom: 10px;
+        }
+        #users{
+            width: 50%;
+            border-collapse: collapse;
         }
     </style>
 </head>
@@ -25,7 +33,33 @@
             <br>
             <input class="login_item" type="submit" value="login">
         </form>
+    </div>
 
+    <div id="user_container">
+        add user
+        <br>
+        <form method="post" th:action="@{/login/addUser}" th:object="${loginForm}">
+            <input type="text" placeholder="username" th:field="*{username}">
+            <input type="password" placeholder="password" th:field="*{password}">
+            <input type="submit" value="add User">
+        </form>
+        remove user
+        <br>
+        <form method="post" th:action="@{/login/removeUser}">
+            <input type="text" name="usernameToRemove" placeholder="username" th:value="*{username}">
+            <input type="submit" value="remove User">
+        </form>
+        user list
+        <table id="users">
+            <tr>
+                <th>username</th>
+                <th>password</th>
+            </tr>
+            <tr th:each="user : ${userList}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+            </tr>
+        </table>
     </div>
 </body>
 </http:html>

@@ -1,7 +1,8 @@
 package org.example.app.services;
 
-import org.apache.log4j.Logger;
+import org.example.web.dto.Book;
 import org.example.web.dto.LoginForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,18 +11,26 @@ import java.util.List;
 public class LoginService {
 
     private final LoginInterface<LoginForm> loginRepo;
-    private Logger logger = Logger.getLogger(LoginService.class);
 
+    @Autowired
     public LoginService(LoginInterface<LoginForm> loginRepo) {
         this.loginRepo = loginRepo;
     }
 
-    public boolean authenticate(LoginForm loginForm) {
-        logger.info("try auth with user-form: " + loginForm);
-        List<LoginForm> users = loginRepo.getAllUsers();
-        for(LoginForm user: users)
-            if (loginForm.getUsername().equals(user.getUsername()) && loginForm.getPassword().equals(user.getPassword()))
-                return true;
-            return false;
+    public boolean authenticate(LoginForm loginForm){
+        return loginRepo.authenticateUser(loginForm);
     }
+
+    public List<LoginForm> showAllUsers(){
+        return loginRepo.getAllUsers();
+    }
+
+    public boolean addUser(LoginForm user){
+        return loginRepo.addUser(user);
+    }
+
+    public boolean deleteUser(String name){
+        return loginRepo.removeUserByName(name);
+    }
+
 }
