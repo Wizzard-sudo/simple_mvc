@@ -43,9 +43,39 @@ public class BookShelfController {
         return "redirect:/books/shelf";
     }
 
-    @PostMapping("/remove")
-    public String removeBook(@RequestParam(value = "bookIdToRemove") Integer bookIdToRemove){
+    @PostMapping("/remove/id")
+    public String removeBookById(@RequestParam(value = "bookIdToRemove") Integer bookIdToRemove){
         if(bookService.removeBookById(bookIdToRemove)){
+            return "redirect:/books/shelf";
+        }else{
+            logger.info("entry does not exist");
+            return "redirect:/books/shelf";
+        }
+    }
+
+    @PostMapping("/remove/author")
+    public String removeBookByAuthor(@RequestParam(value = "bookAuthorToRemove") String bookAuthorToRemove){
+        if(bookService.removeBookByAuthor(bookAuthorToRemove)){
+            return "redirect:/books/shelf";
+        }else{
+            logger.info("entry does not exist");
+            return "redirect:/books/shelf";
+        }
+    }
+
+    @PostMapping("/remove/title")
+    public String removeBookByTitle(@RequestParam(value = "bookTitleToRemove") String bookTitleToRemove){
+        if(bookService.removeBookByTitle(bookTitleToRemove)){
+            return "redirect:/books/shelf";
+        }else{
+            logger.info("entry does not exist");
+            return "redirect:/books/shelf";
+        }
+    }
+
+    @PostMapping("/remove/size")
+    public String removeBookBySize(@RequestParam(value = "bookSizeToRemove") Integer bookSizeToRemove){
+        if(bookService.removeBookBySize(bookSizeToRemove)){
             return "redirect:/books/shelf";
         }else{
             logger.info("entry does not exist");

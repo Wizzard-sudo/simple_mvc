@@ -14,9 +14,6 @@
         #books{
             width: 50%;
             border-collapse: collapse;
-        }
-
-        table{
             margin: 25px;
         }
 
@@ -50,11 +47,48 @@
                 </tr>
             </table>
         </form>
-        <form method="post" th:action="@{/books/remove}">
+        remove book
+        <form method="post" th:action="@{/books/remove/id}">
             <table>
                 <tr>
                     <td>
                         <input type="text" placeholder="id number" th:name="bookIdToRemove">
+                    </td>
+                    <td>
+                        <input type="submit" value="remove">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/remove/author}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="author" th:name="bookAuthorToRemove">
+                    </td>
+                    <td>
+                        <input type="submit" value="remove">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/remove/title}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="title" th:name="bookTitleToRemove">
+                    </td>
+                    <td>
+                        <input type="submit" value="remove">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/remove/size}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="size" th:name="bookSizeToRemove">
                     </td>
                     <td>
                         <input type="submit" value="remove">
