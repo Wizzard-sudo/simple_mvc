@@ -24,11 +24,22 @@
         th, td{
             border-bottom: 1px solid #ddd;
         }
+
+        #container{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+        }
+        #containerChild{
+            margin: 0 10px;
+        }
     </style>
 </head>
 <body>
 
     <div id="root_container">
+        add book
         <form method="post" th:action="@{/books/save}" th:object="${book}">
             <table>
                 <tr>
@@ -47,6 +58,9 @@
                 </tr>
             </table>
         </form>
+
+        <div id="container">
+        <div id="containerChild">
         remove book
         <form method="post" th:action="@{/books/remove/id}">
             <table>
@@ -96,7 +110,50 @@
                 </tr>
             </table>
         </form>
-
+        </div>
+        <div id="containerChild">
+            filter book
+        <form method="post" th:action="@{/books/filter/author}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="author" th:name="bookAuthorToFilter">
+                    </td>
+                    <td>
+                        <input type="submit" value="filter">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/filter/title}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="title" th:name="bookTitleToFilter">
+                    </td>
+                    <td>
+                        <input type="submit" value="filter">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/filter/size}">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="size" th:name="bookSizeToFilter">
+                    </td>
+                    <td>
+                        <input type="submit" value="filter">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/filter/disable}">
+            <input type="submit" value="disable filters">
+        </form>
+        </div>
+        </div>
 
         <table id="books">
             <tr>
@@ -113,6 +170,6 @@
             </tr>
         </table>
 
-    </div>
+
 </body>
 </html>

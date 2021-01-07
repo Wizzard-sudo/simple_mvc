@@ -25,6 +25,10 @@ public class LoginService {
         return loginRepo.getAllUsers();
     }
 
+    public List<LoginForm> showAllUsersHidden(){
+        return loginRepo.getAllUsersHidden();
+    }
+
     public boolean addUser(LoginForm user){
         return loginRepo.addUser(user);
     }

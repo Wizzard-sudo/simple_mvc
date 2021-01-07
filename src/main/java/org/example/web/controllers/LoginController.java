@@ -25,7 +25,7 @@ public class LoginController {
     public String login(Model model) {
         logger.info("GET /login returns login_page.html");
         model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("userList", loginService.showAllUsers());
+        model.addAttribute("userList", loginService.showAllUsersHidden());
         return "login_page";
     }
 

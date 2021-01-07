@@ -83,4 +83,36 @@ public class BookShelfController {
         }
     }
 
+    @PostMapping("/filter/author")
+    public String filterBookByAuthor(@RequestParam(value = "bookAuthorToFilter") String bookAuthorToFilter, Model model){
+        logger.info("filter book by author: " + bookAuthorToFilter);
+        model.addAttribute("book", new Book());
+        model.addAttribute("bookList", bookService.getBooksByAuthor(bookAuthorToFilter));
+        return "book_shelf";
+    }
+
+    @PostMapping("/filter/title")
+    public String filterBookByTitle(@RequestParam(value = "bookTitleToFilter") String bookTitleToFilter, Model model){
+        logger.info("filter book by title: " + bookTitleToFilter);
+        model.addAttribute("book", new Book());
+        model.addAttribute("bookList", bookService.getBooksByTitle(bookTitleToFilter));
+        return "book_shelf";
+    }
+
+    @PostMapping("/filter/size")
+    public String filterBookBySize(@RequestParam(value = "bookSizeToFilter") int bookSizeToFilter, Model model){
+        logger.info("filter book by size: " + bookSizeToFilter);
+        model.addAttribute("book", new Book());
+        model.addAttribute("bookList", bookService.getBooksBySize(bookSizeToFilter));
+        return "book_shelf";
+    }
+
+    @PostMapping("/filter/disable")
+    public String filterBookDisable(Model model){
+        logger.info("filter book is disable");
+        model.addAttribute("book", new Book());
+        model.addAttribute("bookList", bookService.getAllBooks());
+        return "redirect:/books/shelf";
+    }
+
 }

@@ -67,4 +67,31 @@ public class BookRepository implements ProjectRepository<Book>{
             }
         return flagRemove;
     }
+
+    @Override
+    public List<Book> filterItemByAuthor(String bookAuthorToFilter) {
+        List<Book> filterBooks = new ArrayList<>();
+        for(Book book : retreiveAll())
+            if(book.getAuthor().contains(bookAuthorToFilter))
+                filterBooks.add(book);
+        return filterBooks;
+    }
+
+    @Override
+    public List<Book> filterItemByTitle(String bookAuthorToTitle) {
+        List<Book> filterBooks = new ArrayList<>();
+        for(Book book : retreiveAll())
+            if(book.getTitle().contains(bookAuthorToTitle))
+                filterBooks.add(book);
+        return filterBooks;
+    }
+
+    @Override
+    public List<Book> filterItemBySize(Integer bookAuthorToSize) {
+        List<Book> filterBooks = new ArrayList<>();
+        for(Book book : retreiveAll())
+            if(book.getSize().toString().contains(bookAuthorToSize.toString()))
+                filterBooks.add(book);
+        return filterBooks;
+    }
 }

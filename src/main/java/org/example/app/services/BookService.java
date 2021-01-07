@@ -39,4 +39,16 @@ public class BookService {
     public boolean removeBookBySize(Integer bookSizeToRemove) {
         return bookRepo.removeItemBySize(bookSizeToRemove);
     }
+
+    public List<Book> getBooksByAuthor(String bookAuthorToFilter){
+        return bookRepo.filterItemByAuthor(bookAuthorToFilter);
+    }
+
+    public List<Book> getBooksByTitle(String bookAuthorToTitle){
+        return bookRepo.filterItemByTitle(bookAuthorToTitle);
+    }
+
+    public List<Book> getBooksBySize(Integer bookAuthorToSize){
+        return bookRepo.filterItemBySize(bookAuthorToSize);
+    }
 }

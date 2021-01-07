@@ -10,6 +10,8 @@ public interface LoginInterface<T> {
 
     List<T> getAllUsers();
 
+    List<T> getAllUsersHidden();
+
     boolean addUser(LoginForm user);
 
     boolean removeUserByName(String name);

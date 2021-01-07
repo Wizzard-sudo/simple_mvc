@@ -31,6 +31,20 @@ public class LoginRepository implements LoginInterface{
         return new ArrayList<>(users);
     }
 
+    @Override
+    public List<LoginForm> getAllUsersHidden() {
+        List <LoginForm> usersHidden = new ArrayList<>();
+        String hiddenPassword = "";
+        for(LoginForm user : users) {
+            for (int i = 0; i < user.getPassword().length(); i++) {
+                hiddenPassword += "*";
+            }
+
+            usersHidden.add(new LoginForm(user.getUsername(), hiddenPassword));
+            hiddenPassword = "";
+        }
+        return usersHidden;
+    }
 
     @Override
     public boolean addUser(LoginForm user) {
