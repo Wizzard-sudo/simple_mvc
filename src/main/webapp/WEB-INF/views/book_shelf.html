@@ -34,9 +34,18 @@
         #containerChild{
             margin: 0 10px;
         }
+        #users_get{
+            position: absolute;
+            left: 5%;
+            top: 5%;
+        }
     </style>
 </head>
 <body>
+
+<form id = "users_get" method="get" th:action="@{/users}">
+    <input type="submit" value="users">
+</form>
 
     <div id="root_container">
         add book

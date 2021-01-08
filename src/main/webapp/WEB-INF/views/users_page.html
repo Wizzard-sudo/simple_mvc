@@ -1,0 +1,45 @@
+<http:html lang="en" xmlns:http="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>book shelf login</title>
+        <meta charset="UTF-8">
+        <style>
+            #user_container{
+                position: absolute;
+                left: 5%;
+            }
+
+            #users{
+                width: 50%;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+    <div id="user_container">
+        add user
+        <br>
+        <form method="post" th:action="@{/users/addUser}" th:object="${loginForm}">
+            <input type="text" placeholder="username" th:field="*{username}">
+            <input type="password" placeholder="password" th:field="*{password}">
+            <input type="submit" value="add User">
+        </form>
+        remove user
+        <br>
+        <form method="post" th:action="@{/users/removeUser}">
+            <input type="text" name="usernameToRemove" placeholder="username" th:value="*{username}">
+            <input type="submit" value="remove User">
+        </form>
+        user list
+        <table id="users">
+            <tr>
+                <th>username</th>
+                <th>password</th>
+            </tr>
+            <tr th:each="user : ${userList}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+            </tr>
+        </table>
+    </div>
+    </body>
+</http:html>

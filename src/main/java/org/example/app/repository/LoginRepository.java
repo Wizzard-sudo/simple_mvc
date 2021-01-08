@@ -1,7 +1,6 @@
-package org.example.app.services;
+package org.example.app.repository;
 
 import org.apache.log4j.Logger;
-import org.example.web.dto.Book;
 import org.example.web.dto.LoginForm;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,6 @@ public class LoginRepository implements LoginInterface{
     private final Logger logger = Logger.getLogger(BookRepository.class);
     private final LoginForm rootUser = new LoginForm("root", "123");
     private final List<LoginForm> users = new ArrayList(Arrays.asList(rootUser));
-    //private final List<LoginForm> users = new ArrayList<>();
 
     @Override
     public boolean authenticateUser(LoginForm loginForm) {

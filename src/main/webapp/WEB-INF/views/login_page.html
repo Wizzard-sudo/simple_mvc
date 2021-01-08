@@ -36,19 +36,6 @@
     </div>
 
     <div id="user_container">
-        add user
-        <br>
-        <form method="post" th:action="@{/login/addUser}" th:object="${loginForm}">
-            <input type="text" placeholder="username" th:field="*{username}">
-            <input type="password" placeholder="password" th:field="*{password}">
-            <input type="submit" value="add User">
-        </form>
-        remove user
-        <br>
-        <form method="post" th:action="@{/login/removeUser}">
-            <input type="text" name="usernameToRemove" placeholder="username" th:value="*{username}">
-            <input type="submit" value="remove User">
-        </form>
         user list
         <table id="users">
             <tr>
