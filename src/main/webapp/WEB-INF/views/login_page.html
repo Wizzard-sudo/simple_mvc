@@ -41,10 +41,12 @@
             <tr>
                 <th>username</th>
                 <th>password</th>
+                <th>role</th>
             </tr>
             <tr th:each="user : ${userList}">
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.password}"></td>
+                <td th:text="${user.role}"></td>
             </tr>
         </table>
     </div>

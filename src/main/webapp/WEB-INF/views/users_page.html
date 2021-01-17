@@ -21,6 +21,7 @@
         <form method="post" th:action="@{/users/addUser}" th:object="${loginForm}">
             <input type="text" placeholder="username" th:field="*{username}">
             <input type="password" placeholder="password" th:field="*{password}">
+            <input type="text" placeholder="role" th:field="*{role}">
             <input type="submit" value="add User">
         </form>
         remove user
@@ -34,10 +35,12 @@
             <tr>
                 <th>username</th>
                 <th>password</th>
+                <th>role</th>
             </tr>
             <tr th:each="user : ${userList}">
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.password}"></td>
+                <td th:text="${user.role}"></td>
             </tr>
         </table>
     </div>

@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     Logger logger = Logger.getLogger(AppSecurityConfig.class);
-    private LoginService loginService;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,6 +33,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder().encode("123"))
                 .roles("USER");
         }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
