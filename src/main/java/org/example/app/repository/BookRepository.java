@@ -62,62 +62,74 @@ public class BookRepository implements ProjectRepository<Book>, ApplicationConte
 
     @Override
     public boolean removeItemByAuthor(String bookAuthorToRemove) {
-        boolean flagRemove = false;
-        for(Book book : retreiveAll())
-            if(book.getAuthor().equals(bookAuthorToRemove)){
-                logger.info("remove book completed: " + book);
-                flagRemove = repo.remove(book);
-            }
-        return flagRemove;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("author", bookAuthorToRemove);
+        jdbcTemplate.update("DELETE FROM books WHERE author = :author", parameterSource);
+        logger.info("remove book completed");
+        return true;
     }
 
     @Override
     public boolean removeItemByTitle(String bookTitleToRemove) {
-        boolean flagRemove = false;
-        for(Book book : retreiveAll())
-            if(book.getTitle().equals(bookTitleToRemove)){
-                logger.info("remove book completed: " + book);
-                flagRemove = repo.remove(book);
-            }
-        return flagRemove;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("title", bookTitleToRemove);
+        jdbcTemplate.update("DELETE FROM books WHERE title = :title", parameterSource);
+        logger.info("remove book completed");
+        return true;
     }
 
     @Override
     public boolean removeItemBySize(Integer bookSizeToRemove) {
-        boolean flagRemove = false;
-        for(Book book : retreiveAll())
-            if(book.getSize().equals(bookSizeToRemove)){
-                logger.info("remove book completed: " + book);
-                flagRemove = repo.remove(book);
-            }
-        return flagRemove;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("size", bookSizeToRemove);
+        jdbcTemplate.update("DELETE FROM books WHERE size = :size", parameterSource);
+        logger.info("remove book completed");
+        return true;
     }
 
     @Override
     public List<Book> filterItemByAuthor(String bookAuthorToFilter) {
-        List<Book> filterBooks = new ArrayList<>();
-        for(Book book : retreiveAll())
-            if(book.getAuthor().contains(bookAuthorToFilter))
-                filterBooks.add(book);
-        return filterBooks;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("author", bookAuthorToFilter);
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE author = :author", parameterSource, (ResultSet rs, int rowNum) ->{
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setSize(rs.getInt("size"));
+            return book;
+        });
+            return new ArrayList<>(books);
     }
 
     @Override
     public List<Book> filterItemByTitle(String bookAuthorToTitle) {
-        List<Book> filterBooks = new ArrayList<>();
-        for(Book book : retreiveAll())
-            if(book.getTitle().contains(bookAuthorToTitle))
-                filterBooks.add(book);
-        return filterBooks;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("title", bookAuthorToTitle);
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE title = :title", parameterSource, (ResultSet rs, int rowNum) ->{
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setSize(rs.getInt("size"));
+            return book;
+        });
+        return new ArrayList<>(books);
     }
 
     @Override
     public List<Book> filterItemBySize(Integer bookAuthorToSize) {
-        List<Book> filterBooks = new ArrayList<>();
-        for(Book book : retreiveAll())
-            if(book.getSize().toString().contains(bookAuthorToSize.toString()))
-                filterBooks.add(book);
-        return filterBooks;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("size", bookAuthorToSize);
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE size = :size", parameterSource, (ResultSet rs, int rowNum) ->{
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setSize(rs.getInt("size"));
+            return book;
+        });
+        return new ArrayList<>(books);
     }
 
     @Override

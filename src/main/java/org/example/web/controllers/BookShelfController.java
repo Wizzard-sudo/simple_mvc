@@ -104,6 +104,7 @@ public class BookShelfController {
     public String filterBookByAuthor(@RequestParam(value = "bookAuthorToFilter") String bookAuthorToFilter, Model model){
         logger.info("filter book by author: " + bookAuthorToFilter);
         model.addAttribute("book", new Book());
+        model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookList", bookService.getBooksByAuthor(bookAuthorToFilter));
         return "book_shelf";
     }
@@ -112,6 +113,7 @@ public class BookShelfController {
     public String filterBookByTitle(@RequestParam(value = "bookTitleToFilter") String bookTitleToFilter, Model model){
         logger.info("filter book by title: " + bookTitleToFilter);
         model.addAttribute("book", new Book());
+        model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookList", bookService.getBooksByTitle(bookTitleToFilter));
         return "book_shelf";
     }
@@ -120,6 +122,7 @@ public class BookShelfController {
     public String filterBookBySize(@RequestParam(value = "bookSizeToFilter") int bookSizeToFilter, Model model){
         logger.info("filter book by size: " + bookSizeToFilter);
         model.addAttribute("book", new Book());
+        model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookList", bookService.getBooksBySize(bookSizeToFilter));
         return "book_shelf";
     }
