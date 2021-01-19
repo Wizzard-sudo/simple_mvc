@@ -1,4 +1,4 @@
-package org.example.web.dto;
+package org.example.web.dto.remove;
 
 import javax.validation.constraints.NotNull;
 

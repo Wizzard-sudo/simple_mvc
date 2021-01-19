@@ -19,15 +19,32 @@
         add user
         <br>
         <form method="post" th:action="@{/users/addUser}" th:object="${loginForm}">
-            <input type="text" placeholder="username" th:field="*{username}">
-            <input type="password" placeholder="password" th:field="*{password}">
-            <input type="text" placeholder="role" th:field="*{role}">
-            <input type="submit" value="add User">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="username" th:field="*{username}">
+                        <p th:if="${#fields.hasErrors('username')}">username must have more than 3 characters</p>
+                    </td>
+                    <td>
+                        <input type="password" placeholder="password" th:field="*{password}">
+                        <p th:if="${#fields.hasErrors('password')}">password must have more than 5 characters</p>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="role" th:field="*{role}">
+                        <p th:if="${#fields.hasErrors('role')}">role must have more than 3 characters</p>
+                    </td>
+                    <td>
+                    <input type="submit" value="add User">
+                    </td>
+                </tr>
+            </table>
         </form>
+
         remove user
         <br>
-        <form method="post" th:action="@{/users/removeUser}">
-            <input type="text" name="usernameToRemove" placeholder="username" th:value="*{username}">
+        <form method="post" th:action="@{/users/removeUser}" th:object="${usernameToRemove}">
+            <input type="text" placeholder="username" th:field="*{username}">
+            <p th:if="${#fields.hasErrors()}">empty field!</p>
             <input type="submit" value="remove User">
         </form>
         user list

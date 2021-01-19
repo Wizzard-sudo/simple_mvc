@@ -3,11 +3,14 @@ package org.example.web.controllers;
 import org.apache.log4j.Logger;
 import org.example.app.services.LoginService;
 import org.example.web.dto.LoginForm;
+import org.example.web.dto.remove.UsernameToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/users")
@@ -23,24 +26,38 @@ public class UsersController {
 
     @GetMapping
     public String login(Model model) {
-        logger.info("GET /login returns login_page.html");
         model.addAttribute("loginForm", new LoginForm());
+        model.addAttribute("usernameToRemove", new UsernameToRemove());
         model.addAttribute("userList", loginService.showAllUsers());
         return "users_page";
     }
 
-
     @PostMapping("/addUser")
-    public String addUser(LoginForm loginForm){
-        if(loginForm.getUsername() != "" && loginForm.getPassword() != ""){
+    public String addUser(@Valid LoginForm loginForm, BindingResult bindingResult, Model model){
+        if(!bindingResult.hasErrors()){
             loginService.addUser(loginForm);
             logger.info("user added successfully: " + loginForm);
-        }else{
+        }else {
             logger.info("discovered empty fields, the user is not added");
         }
-        return "redirect:/users";
+        model.addAttribute("usernameToRemove", new UsernameToRemove());
+        model.addAttribute("userList", loginService.showAllUsers());
+        return "users_page";
     }
 
+    @PostMapping("/removeUser")
+    public String removeUser(@Valid UsernameToRemove usernameToRemove, BindingResult bindingResult, Model model){
+        model.addAttribute("loginForm", new LoginForm());
+        if(!bindingResult.hasErrors()) {
+            loginService.deleteUser(usernameToRemove.getUsername());
+            logger.info("deleted user with the name " + usernameToRemove.getUsername());
+        }else{
+            logger.info("user was not deleted, reason is an empty string");
+        }
+        model.addAttribute("userList", loginService.showAllUsers());
+        return "users_page";
+    }
+/*
     @PostMapping("/removeUser")
     public String removeUser(@RequestParam(value = "usernameToRemove") String usernameToRemove){
         if( usernameToRemove != "") {
@@ -50,6 +67,6 @@ public class UsersController {
             logger.info("user was not deleted, reason is an empty string");
         }
         return "redirect:/users";
-    }
+    }*/
 
 }

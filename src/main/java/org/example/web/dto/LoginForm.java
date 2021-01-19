@@ -1,9 +1,14 @@
 package org.example.web.dto;
 
+import org.hibernate.validator.constraints.Length;
+
 public class LoginForm {
 
+    @Length(min = 2)
     private String username;
+    @Length(min = 5)
     private String password;
+    @Length(min = 3)
     private String role;
 
     public LoginForm(){
