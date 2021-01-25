@@ -1,6 +1,7 @@
 package org.example.web.controllers;
 
 import org.apache.log4j.Logger;
+import org.example.app.exceptions.UploadNullFileException;
 import org.example.app.services.BookService;
 import org.example.web.dto.Book;
 import org.example.web.dto.filter.BookAuthorToFilter;
@@ -15,10 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -218,24 +216,48 @@ public class BookShelfController {
     }
 
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) throws Exception{
-        String name = file.getOriginalFilename();
-        byte[] bytes = file.getBytes();
+    public String uploadFile(@RequestParam("file") MultipartFile file) throws Exception, UploadNullFileException {
 
-        //create dir
-        String rootPath = System.getProperty("catalina.home");
-        File dir = new File(rootPath + File.separator + "external_uploads");
-        if(!dir.exists())
-            dir.mkdirs();
+        if(!file.isEmpty()) {
+            logger.info("start upload :");
+            String name = file.getOriginalFilename();
+            byte[] bytes = file.getBytes();
 
-        //create file
-        File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-        stream.write(bytes);
-        stream.close();
+            //create dir
+            String rootPath = System.getProperty("catalina.home");
+            File dir = new File(rootPath + File.separator + "external_uploads");
+            if (!dir.exists())
+                dir.mkdirs();
 
-        logger.info("new file saved at:" + serverFile.getAbsolutePath());
+            //create file
+            File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+            stream.write(bytes);
+            stream.close();
 
-        return "redirect:/books/shelf";
+            logger.info("new file saved at:" + serverFile.getAbsolutePath());
+
+            return "redirect:/books/shelf";
+        }
+        else{
+            logger.info("null file");
+            throw new UploadNullFileException("No file selected");
+        }
+    }
+
+    @ExceptionHandler(UploadNullFileException.class)
+    public String fileErrorHandler(Model model, UploadNullFileException exception){
+        logger.info("No file selected");
+        model.addAttribute("book", new Book());
+        model.addAttribute("bookIdToRemove", new BookIdToRemove());
+        model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
+        model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
+        model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
+        model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+        model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+        model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+        model.addAttribute("errorMessageUploadFile", exception.getMessage());
+        model.addAttribute("bookList", bookService.getAllBooks());
+        return "book_shelf";
     }
 }
