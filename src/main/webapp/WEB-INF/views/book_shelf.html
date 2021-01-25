@@ -178,6 +178,9 @@
                     <td th:if="${#fields.hasErrors()}">
                         <p>empty field!</p>
                     </td>
+                    <td>
+                        <p th:text="${errorMessageFilterBookByAuthor}"></p>
+                    </td>
                 </tr>
             </table>
         </form>
@@ -193,6 +196,9 @@
                     <td th:if="${#fields.hasErrors()}">
                         <p>empty field!</p>
                     </td>
+                    <td>
+                        <p th:text="${errorMessageFilterBookByTitle}"></p>
+                    </td>
                 </tr>
             </table>
         </form>
@@ -207,6 +213,9 @@
                     </td>
                     <td th:if="${#fields.hasErrors()}">
                         <p>empty field!</p>
+                    </td>
+                    <td>
+                        <p th:text="${errorMessageFilterBookBySize}"></p>
                     </td>
                 </tr>
             </table>

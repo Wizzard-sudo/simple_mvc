@@ -1,7 +1,7 @@
 package org.example.web.controllers;
 
 import org.apache.log4j.Logger;
-import org.example.app.exceptions.RemoveBookException;
+import org.example.app.exceptions.NonexistentBookException;
 import org.example.app.exceptions.UploadNullFileException;
 import org.example.app.services.BookService;
 import org.example.web.dto.Book;
@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "books")
@@ -78,7 +79,7 @@ public class BookShelfController {
     }
 
     @PostMapping("/remove/id")
-    public String removeBookById(@Valid BookIdToRemove bookIdToRemove, BindingResult bindingResult, Model model) throws RemoveBookException {
+    public String removeBookById(@Valid BookIdToRemove bookIdToRemove, BindingResult bindingResult, Model model) throws NonexistentBookException {
         if(bindingResult.hasErrors()){
             model.addAttribute("book", new Book());
             model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
@@ -94,13 +95,13 @@ public class BookShelfController {
             return "redirect:/books/shelf";
             else{
                 logger.info("exception remove book by id");
-                throw new RemoveBookException("errorMessageRemoveBookById", "id does not exist");
+                throw new NonexistentBookException("errorMessageRemoveBookById", "id does not exist");
             }
         }
      }
 
     @PostMapping("/remove/author")
-    public String removeBookByAuthor (@Valid BookAuthorToRemove bookAuthorToRemove, BindingResult bindingResult, Model model) throws RemoveBookException{
+    public String removeBookByAuthor (@Valid BookAuthorToRemove bookAuthorToRemove, BindingResult bindingResult, Model model) throws NonexistentBookException {
         if(bindingResult.hasErrors()){
             model.addAttribute("book", new Book());
             model.addAttribute("bookIdToRemove", new BookIdToRemove());
@@ -116,13 +117,13 @@ public class BookShelfController {
                 return "redirect:/books/shelf";
             else{
                 logger.info("exception remove book by author");
-                throw new RemoveBookException("errorMessageRemoveBookByAuthor", "author does not exist");
+                throw new NonexistentBookException("errorMessageRemoveBookByAuthor", "author does not exist");
             }
         }
     }
 
     @PostMapping("/remove/title")
-    public String removeBookByTitle(@Valid BookTitleToRemove bookTitleToRemove, BindingResult bindingResult, Model model) throws RemoveBookException{
+    public String removeBookByTitle(@Valid BookTitleToRemove bookTitleToRemove, BindingResult bindingResult, Model model) throws NonexistentBookException {
         if(bindingResult.hasErrors()){
             model.addAttribute("book", new Book());
             model.addAttribute("bookIdToRemove", new BookIdToRemove());
@@ -138,13 +139,13 @@ public class BookShelfController {
                 return "redirect:/books/shelf";
             else{
                 logger.info("exception remove book by title");
-                throw new RemoveBookException("errorMessageRemoveBookByTitle", "title does not exist");
+                throw new NonexistentBookException("errorMessageRemoveBookByTitle", "title does not exist");
             }
         }
     }
 
     @PostMapping("/remove/size")
-    public String removeBookBySize(@Valid BookSizeToRemove bookSizeToRemove, BindingResult bindingResult, Model model) throws Exception{
+    public String removeBookBySize(@Valid BookSizeToRemove bookSizeToRemove, BindingResult bindingResult, Model model) throws NonexistentBookException{
         if(bindingResult.hasErrors()){
             model.addAttribute("book", new Book());
             model.addAttribute("bookIdToRemove", new BookIdToRemove());
@@ -160,13 +161,13 @@ public class BookShelfController {
                 return "redirect:/books/shelf";
             else{
                 logger.info("exception remove book by size");
-                throw new RemoveBookException("errorMessageRemoveBookBySize", "size does not exist");
+                throw new NonexistentBookException("errorMessageRemoveBookBySize", "size does not exist");
             }
         }
     }
 
     @PostMapping("/filter/author")
-    public String filterBookByAuthor(@Valid BookAuthorToFilter bookAuthorToFilter, BindingResult bindingResult, Model model){
+    public String filterBookByAuthor(@Valid BookAuthorToFilter bookAuthorToFilter, BindingResult bindingResult, Model model) throws NonexistentBookException{
         logger.info("filter book by author: " + bookAuthorToFilter);
         model.addAttribute("book", new Book());
         model.addAttribute("bookIdToRemove", new BookIdToRemove());
@@ -177,14 +178,20 @@ public class BookShelfController {
         model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
+            return "book_shelf";
         }else {
-            model.addAttribute("bookList", bookService.getBooksByAuthor(bookAuthorToFilter.getAuthor()));
+            List<Book> books = bookService.getBooksByAuthor(bookAuthorToFilter.getAuthor());
+            if(books.isEmpty()){
+                throw new NonexistentBookException("errorMessageFilterBookByAuthor", "author does not exist");
+            }else{
+                model.addAttribute("bookList", books);
+                return "book_shelf";
+            }
         }
-        return "book_shelf";
     }
 
     @PostMapping("/filter/title")
-    public String filterBookByTitle(@Valid BookTitleToFilter bookTitleToFilter, BindingResult bindingResult, Model model){
+    public String filterBookByTitle(@Valid BookTitleToFilter bookTitleToFilter, BindingResult bindingResult, Model model) throws NonexistentBookException{
         model.addAttribute("book", new Book());
         model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
@@ -194,14 +201,20 @@ public class BookShelfController {
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
+            return "book_shelf";
         }else {
-            model.addAttribute("bookList", bookService.getBooksByTitle(bookTitleToFilter.getTitle()));
+            List<Book> books = bookService.getBooksByTitle(bookTitleToFilter.getTitle());
+            if(books.isEmpty()){
+                throw new NonexistentBookException("errorMessageFilterBookByTitle", "title does not exist");
+            }else{
+                model.addAttribute("bookList", books);
+                return "book_shelf";
+            }
         }
-        return "book_shelf";
     }
 
     @PostMapping("/filter/size")
-    public String filterBookBySize(@Valid BookSizeToFilter bookSizeToFilter, BindingResult bindingResult, Model model){
+    public String filterBookBySize(@Valid BookSizeToFilter bookSizeToFilter, BindingResult bindingResult, Model model) throws NonexistentBookException{
         model.addAttribute("book", new Book());
         model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
@@ -211,10 +224,16 @@ public class BookShelfController {
         model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
+            return "book_shelf";
         }else {
-            model.addAttribute("bookList", bookService.getBooksBySize(bookSizeToFilter.getSize()));
+            List<Book> books = bookService.getBooksBySize(bookSizeToFilter.getSize());
+            if(books.isEmpty()){
+                throw new NonexistentBookException("errorMessageFilterBookBySize", "size does not exist");
+            }else{
+                model.addAttribute("bookList", books);
+                return "book_shelf";
+            }
         }
-        return "book_shelf";
     }
 
     @PostMapping("/filter/disable")
@@ -278,8 +297,8 @@ public class BookShelfController {
         return "book_shelf";
     }
 
-    @ExceptionHandler(RemoveBookException.class)
-    public String removeBookException(Model model, RemoveBookException exception){
+    @ExceptionHandler(NonexistentBookException.class)
+    public String removeBookException(Model model, NonexistentBookException exception){
         model.addAttribute("book", new Book());
         model.addAttribute("bookIdToRemove", new BookIdToRemove());
         model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());

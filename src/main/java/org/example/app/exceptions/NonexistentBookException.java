@@ -1,12 +1,12 @@
 package org.example.app.exceptions;
 
-public class RemoveBookException extends Exception{
+public class NonexistentBookException extends Exception{
 
     private String attribute;
 
     private String message;
 
-    public RemoveBookException(String attribute ,String message){
+    public NonexistentBookException(String attribute , String message){
         this.attribute = attribute;
         this.message = message;
     }
