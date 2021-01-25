@@ -53,38 +53,62 @@ public class BookRepository implements ProjectRepository<Book>, ApplicationConte
 
     @Override
     public boolean removeItemById(Integer bookIdToRemove) {
+        int deletedCount;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", bookIdToRemove);
-        jdbcTemplate.update("DELETE FROM books WHERE id = :id", parameterSource);
-        logger.info("remove book completed");
-        return true;
+        deletedCount = jdbcTemplate.update("DELETE FROM books WHERE id = :id", parameterSource);
+        if(deletedCount != 0) {
+            logger.info("remove book completed");
+            return true;
+        }else{
+            logger.info("remove book failed");
+            return false;
+        }
     }
 
     @Override
     public boolean removeItemByAuthor(String bookAuthorToRemove) {
+        int deletedCount;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("author", bookAuthorToRemove);
-        jdbcTemplate.update("DELETE FROM books WHERE author = :author", parameterSource);
-        logger.info("remove book completed");
-        return true;
+        deletedCount = jdbcTemplate.update("DELETE FROM books WHERE author = :author", parameterSource);
+        if (deletedCount != 0) {
+            logger.info("remove book completed");
+            return true;
+        } else {
+            logger.info("remove book failed");
+            return false;
+        }
     }
 
     @Override
     public boolean removeItemByTitle(String bookTitleToRemove) {
+        int deletedCount;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("title", bookTitleToRemove);
-        jdbcTemplate.update("DELETE FROM books WHERE title = :title", parameterSource);
-        logger.info("remove book completed");
-        return true;
+        deletedCount = jdbcTemplate.update("DELETE FROM books WHERE title = :title", parameterSource);
+        if (deletedCount != 0) {
+            logger.info("remove book completed");
+            return true;
+        } else {
+            logger.info("remove book failed");
+            return false;
+        }
     }
 
     @Override
     public boolean removeItemBySize(Integer bookSizeToRemove) {
+        int deletedCount;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("size", bookSizeToRemove);
-        jdbcTemplate.update("DELETE FROM books WHERE size = :size", parameterSource);
-        logger.info("remove book completed");
-        return true;
+        deletedCount = jdbcTemplate.update("DELETE FROM books WHERE size = :size", parameterSource);
+        if (deletedCount != 0) {
+            logger.info("remove book completed");
+            return true;
+        } else {
+            logger.info("remove book failed");
+            return false;
+        }
     }
 
     @Override
