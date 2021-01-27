@@ -17,6 +17,15 @@
             margin: 25px;
         }
 
+        #files{
+            width: 20%;
+            border-collapse: collapse;
+            margin: 25px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
         th{
             text-align: left;
         }
@@ -240,7 +249,24 @@
                 <td th:text="${book.size}"></td>
             </tr>
         </table>
+        </div>
 
+<table id="files">
+    <tr>
+        <th>name</th>
+        <th>download</th>
 
+    </tr>
+    <tr th:each="file : ${fileList}">
+        <form method="post" th:action="@{/books/downloadFile}">
+            <td th:text="${file}"></td>
+            <td>
+                <input type="hidden" name="fileName" th:value="${file}">
+                <input type="submit" value="download">
+
+            </td>
+        </form>
+    </tr>
+</table>
 </body>
 </html>

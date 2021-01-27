@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.example.app.exceptions.NonexistentBookException;
 import org.example.app.exceptions.UploadNullFileException;
 import org.example.app.services.BookService;
+import org.example.app.services.FileService;
 import org.example.web.dto.Book;
 import org.example.web.dto.filter.BookAuthorToFilter;
 import org.example.web.dto.filter.BookSizeToFilter;
@@ -14,6 +15,7 @@ import org.example.web.dto.remove.BookSizeToRemove;
 import org.example.web.dto.remove.BookTitleToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -33,10 +33,12 @@ public class BookShelfController {
 
     private Logger logger = Logger.getLogger(BookShelfController.class);
     private BookService bookService;
+    private FileService fileService;
 
     @Autowired
-    public BookShelfController(BookService bookService) {
+    public BookShelfController(BookService bookService, FileService fileService) {
         this.bookService = bookService;
+        this.fileService = fileService;
     }
 
     @GetMapping("/shelf")
@@ -51,6 +53,7 @@ public class BookShelfController {
         model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         model.addAttribute("bookList", bookService.getAllBooks());
+        model.addAttribute("fileList", fileService.getFilesName());
         return "book_shelf";
     }
 
@@ -66,6 +69,7 @@ public class BookShelfController {
             model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
             model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else{
             if(book.getTitle() == "" && book.getAuthor() == "" && book.getSize() == null)
@@ -89,6 +93,7 @@ public class BookShelfController {
             model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
             model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             if(bookService.removeBookById(bookIdToRemove.getId()))
@@ -111,6 +116,7 @@ public class BookShelfController {
             model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
             model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             if(bookService.removeBookByAuthor(bookAuthorToRemove.getAuthor()))
@@ -133,6 +139,7 @@ public class BookShelfController {
             model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
             model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             if(bookService.removeBookByTitle(bookTitleToRemove.getTitle()))
@@ -155,6 +162,7 @@ public class BookShelfController {
             model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
             model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             if(bookService.removeBookBySize(bookSizeToRemove.getSize()))
@@ -178,6 +186,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             List<Book> books = bookService.getBooksByAuthor(bookAuthorToFilter.getAuthor());
@@ -201,6 +210,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else {
             List<Book> books = bookService.getBooksByTitle(bookTitleToFilter.getTitle());
@@ -222,6 +232,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
         model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
         model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+        model.addAttribute("fileList", fileService.getFilesName());
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookService.getAllBooks());
             return "book_shelf";
@@ -248,6 +259,7 @@ public class BookShelfController {
         model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         model.addAttribute("bookList", bookService.getAllBooks());
+        model.addAttribute("fileList", fileService.getFilesName());
         return "redirect:/books/shelf";
     }
 
@@ -280,6 +292,14 @@ public class BookShelfController {
             throw new UploadNullFileException("No file selected");
         }
     }
+
+    @PostMapping("/downloadFile")
+    public ResponseEntity<Object> downloadFile(@RequestParam("fileName") String fileName) throws FileNotFoundException {
+
+        logger.info("name: " + fileName);
+        return fileService.downloadFile(fileName);
+    }
+
 
     @ExceptionHandler(UploadNullFileException.class)
     public String fileErrorHandler(Model model, UploadNullFileException exception){
