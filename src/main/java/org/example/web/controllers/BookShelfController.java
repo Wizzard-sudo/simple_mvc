@@ -3,8 +3,8 @@ package org.example.web.controllers;
 import org.apache.log4j.Logger;
 import org.example.app.exceptions.NonexistentBookException;
 import org.example.app.exceptions.UploadNullFileException;
-import org.example.app.services.BookService;
-import org.example.app.services.FileService;
+import org.example.app.services.Book.BookService;
+import org.example.app.services.File.FileService;
 import org.example.web.dto.Book;
 import org.example.web.dto.filter.BookAuthorToFilter;
 import org.example.web.dto.filter.BookSizeToFilter;
@@ -15,6 +15,9 @@ import org.example.web.dto.remove.BookSizeToRemove;
 import org.example.web.dto.remove.BookTitleToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "books")
@@ -54,6 +58,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         model.addAttribute("bookList", bookService.getAllBooks());
         model.addAttribute("fileList", fileService.getFilesName());
+
         return "book_shelf";
     }
 
@@ -72,15 +77,12 @@ public class BookShelfController {
             model.addAttribute("fileList", fileService.getFilesName());
             return "book_shelf";
         }else{
-            if(book.getTitle() == "" && book.getAuthor() == "" && book.getSize() == null)
-                logger.info("attempt to create an EMPTY book: creation canceled");
-            else {
                 bookService.saveBook(book);
                 logger.info("current repository size: " + bookService.getAllBooks().size());
             }
             return "redirect:/books/shelf";
         }
-    }
+
 
     @PostMapping("/remove/id")
     public String removeBookById(@Valid BookIdToRemove bookIdToRemove, BindingResult bindingResult, Model model) throws NonexistentBookException {
@@ -264,27 +266,10 @@ public class BookShelfController {
     }
 
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) throws Exception, UploadNullFileException {
+    public String uploadFile(@RequestParam("file") MultipartFile file) throws UploadNullFileException, IOException {
 
         if(!file.isEmpty()) {
-            logger.info("start upload :");
-            String name = file.getOriginalFilename();
-            byte[] bytes = file.getBytes();
-
-            //create dir
-            String rootPath = System.getProperty("catalina.home");
-            File dir = new File(rootPath + File.separator + "external_uploads");
-            if (!dir.exists())
-                dir.mkdirs();
-
-            //create file
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-            stream.write(bytes);
-            stream.close();
-
-            logger.info("new file saved at:" + serverFile.getAbsolutePath());
-
+            fileService.uploadFile(file);
             return "redirect:/books/shelf";
         }
         else{
@@ -294,9 +279,8 @@ public class BookShelfController {
     }
 
     @PostMapping("/downloadFile")
-    public ResponseEntity<Object> downloadFile(@RequestParam("fileName") String fileName) throws FileNotFoundException {
+    public Object downloadFile(@RequestParam("fileName") String fileName) throws IOException {
 
-        logger.info("name: " + fileName);
         return fileService.downloadFile(fileName);
     }
 
@@ -314,6 +298,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         model.addAttribute("errorMessageUploadFile", exception.getMessage());
         model.addAttribute("bookList", bookService.getAllBooks());
+        model.addAttribute("fileList", fileService.getFilesName());
         return "book_shelf";
     }
 
@@ -329,6 +314,7 @@ public class BookShelfController {
         model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
         model.addAttribute(exception.getAttribute(), exception.getMessage());
         model.addAttribute("bookList", bookService.getAllBooks());
+        model.addAttribute("fileList", fileService.getFilesName());
         return "book_shelf";
     }
 }

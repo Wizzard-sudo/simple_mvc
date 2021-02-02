@@ -1,8 +1,8 @@
-package org.example.app.repository;
+package org.example.app.repository.Book;
 
 import java.util.List;
 
-public interface ProjectRepository<T> {
+public interface BookRepository<T> {
     List<T> retreiveAll();
 
     void store(T book);
