@@ -2,6 +2,8 @@ package org.example.app.repository.Book;
 
 import java.util.List;
 
+//TODO зачем тут дженерик? Это специализированный интерфейс используйте сразу в именах Book а не item,
+// и вместо дженеролизированного типа тип Book
 public interface BookRepository<T> {
     List<T> retreiveAll();
 

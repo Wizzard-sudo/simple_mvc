@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+//TODo аналогично про пакеты Book и File, а security с маленькой буквы написать.
+//т.е. мы делим по пакетам согласно архитектуры приложения, что к какой части относится
 @Service
 public class BookService {
 

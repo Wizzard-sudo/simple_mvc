@@ -14,14 +14,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-
+//TODO положите это в пакет security
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     Logger logger = Logger.getLogger(AppSecurityConfig.class);
-
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -31,11 +29,10 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("root")
                 .password(passwordEncoder().encode("123"))
                 .roles("USER");
-        }
-
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -58,7 +55,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web){
+    public void configure(WebSecurity web) {
         logger.info("config web security");
         web
                 .ignoring()

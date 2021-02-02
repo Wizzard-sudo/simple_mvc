@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO в целом по проекту повторяющиеся строки лучше вынести в константы, но это по желанию
+
 @Repository
 public class BookRepositoryImpl implements BookRepository<Book> {
 
@@ -25,7 +27,7 @@ public class BookRepositoryImpl implements BookRepository<Book> {
 
     @Override
     public List<Book> retreiveAll() {
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books", (ResultSet rs, int rowNum) ->{
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books", (ResultSet rs, int rowNum) -> {
             Book book = new Book();
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));
@@ -52,10 +54,10 @@ public class BookRepositoryImpl implements BookRepository<Book> {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", bookIdToRemove);
         deletedCount = jdbcTemplate.update("DELETE FROM books WHERE id = :id", parameterSource);
-        if(deletedCount != 0) {
+        if (deletedCount != 0) {
             logger.info("remove book completed");
             return true;
-        }else{
+        } else {
             logger.info("remove book failed");
             return false;
         }
@@ -110,7 +112,7 @@ public class BookRepositoryImpl implements BookRepository<Book> {
     public List<Book> filterItemByAuthor(String bookAuthorToFilter) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("author", bookAuthorToFilter);
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE author = :author", parameterSource, (ResultSet rs, int rowNum) ->{
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE author = :author", parameterSource, (ResultSet rs, int rowNum) -> {
             Book book = new Book();
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));
@@ -118,14 +120,14 @@ public class BookRepositoryImpl implements BookRepository<Book> {
             book.setSize(rs.getInt("size"));
             return book;
         });
-            return new ArrayList<>(books);
+        return new ArrayList<>(books);
     }
 
     @Override
     public List<Book> filterItemByTitle(String bookAuthorToTitle) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("title", bookAuthorToTitle);
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE title = :title", parameterSource, (ResultSet rs, int rowNum) ->{
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE title = :title", parameterSource, (ResultSet rs, int rowNum) -> {
             Book book = new Book();
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));
@@ -140,7 +142,7 @@ public class BookRepositoryImpl implements BookRepository<Book> {
     public List<Book> filterItemBySize(Integer bookAuthorToSize) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("size", bookAuthorToSize);
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE size = :size", parameterSource, (ResultSet rs, int rowNum) ->{
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE size = :size", parameterSource, (ResultSet rs, int rowNum) -> {
             Book book = new Book();
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));

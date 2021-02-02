@@ -4,6 +4,7 @@ import org.example.web.dto.LoginForm;
 
 import java.util.List;
 
+//TODO пакет секурити с маленькой буквы напишите)) и опять же про дженерики
 public interface LoginRepository<T> {
 
     boolean authenticateUser(LoginForm loginForm);
