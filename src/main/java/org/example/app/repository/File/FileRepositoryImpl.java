@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Repository
 public class FileRepositoryImpl implements FileRepository {
@@ -21,9 +20,7 @@ public class FileRepositoryImpl implements FileRepository {
         logger.info("download File: " + fileName);
 
         fileName = "D:\\Java Project\\apache-tomcat-9.0.41\\external_uploads\\" + fileName;
-        File file = new File(fileName);
-
-        return file;
+        return new File(fileName);
     }
 
     @Override
@@ -32,12 +29,12 @@ public class FileRepositoryImpl implements FileRepository {
         File packagePath = new File("D:\\Java Project\\apache-tomcat-9.0.41\\external_uploads");
         File[] packageFile = packagePath.listFiles();
         ArrayList<String> listFileName = new ArrayList<>();
-        for(File file : Arrays.asList(packageFile))
+        if(packageFile !=null)
+        for(File file : packageFile)
             listFileName.add(file.getName());
-
         return listFileName;
     }
-
+    @Override
     public void uploadFile(MultipartFile file) throws IOException {
         logger.info("start upload :");
         String name = file.getOriginalFilename();

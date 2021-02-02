@@ -3,7 +3,6 @@ package org.example.app.repository.Book;
 import org.apache.log4j.Logger;
 import org.example.web.dto.Book;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,8 +15,6 @@ import java.util.List;
 public class BookRepositoryImpl implements BookRepository<Book> {
 
     private final Logger logger = Logger.getLogger(BookRepositoryImpl.class);
-    private final List<Book> repo = new ArrayList<>();
-    private ApplicationContext context;
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

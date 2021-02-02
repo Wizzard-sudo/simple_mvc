@@ -12,7 +12,7 @@ public interface LoginRepository<T> {
 
     List<T> getAllUsersHidden();
 
-    boolean addUser(LoginForm user);
+    void addUser(LoginForm user);
 
     boolean removeUserByName(String name);
 }

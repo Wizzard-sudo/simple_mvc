@@ -1,9 +1,9 @@
 package org.example.web.controllers;
 
 import org.apache.log4j.Logger;
+import org.example.app.exceptions.NonexistentBookException;
 import org.example.app.services.Security.LoginService;
 import org.example.web.dto.LoginForm;
-import org.example.web.dto.remove.UsernameToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +27,6 @@ public class UsersController {
     @GetMapping
     public String login(Model model) {
         model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("usernameToRemove", new UsernameToRemove());
         model.addAttribute("userList", loginService.showAllUsers());
         return "users_page";
     }
@@ -40,33 +39,28 @@ public class UsersController {
         }else {
             logger.info("discovered empty fields, the user is not added");
         }
-        model.addAttribute("usernameToRemove", new UsernameToRemove());
         model.addAttribute("userList", loginService.showAllUsers());
         return "users_page";
     }
 
     @PostMapping("/removeUser")
-    public String removeUser(@Valid UsernameToRemove usernameToRemove, BindingResult bindingResult, Model model){
+    public String removeUser(@RequestParam(name = "usernameToRemove") String usernameToRemove) throws NonexistentBookException {
+        if(usernameToRemove.isEmpty()) {
+            throw new NonexistentBookException("errorMessageRemoveUsername", "username empty!");
+        }else{
+            if (loginService.deleteUser(usernameToRemove))
+                return "redirect:/users";
+            else {
+                throw new NonexistentBookException("errorMessageRemoveUsername", "username does not exist");
+            }
+        }
+    }
+
+    @ExceptionHandler(NonexistentBookException.class)
+    public String removeBookException(Model model, NonexistentBookException exception){
         model.addAttribute("loginForm", new LoginForm());
-        if(!bindingResult.hasErrors()) {
-            loginService.deleteUser(usernameToRemove.getUsername());
-            logger.info("deleted user with the name " + usernameToRemove.getUsername());
-        }else{
-            logger.info("user was not deleted, reason is an empty string");
-        }
         model.addAttribute("userList", loginService.showAllUsers());
+        model.addAttribute(exception.getAttribute(), exception.getMessage());
         return "users_page";
     }
-/*
-    @PostMapping("/removeUser")
-    public String removeUser(@RequestParam(value = "usernameToRemove") String usernameToRemove){
-        if( usernameToRemove != "") {
-            loginService.deleteUser(usernameToRemove);
-            logger.info("deleted user with the name " + usernameToRemove);
-        }else{
-            logger.info("user was not deleted, reason is an empty string");
-        }
-        return "redirect:/users";
-    }*/
-
 }

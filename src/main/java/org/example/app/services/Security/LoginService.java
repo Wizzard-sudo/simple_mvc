@@ -29,8 +29,8 @@ public class LoginService {
         return loginRepo.getAllUsersHidden();
     }
 
-    public boolean addUser(LoginForm user){
-        return loginRepo.addUser(user);
+    public void addUser(LoginForm user){
+        loginRepo.addUser(user);
     }
 
     public boolean deleteUser(String name){

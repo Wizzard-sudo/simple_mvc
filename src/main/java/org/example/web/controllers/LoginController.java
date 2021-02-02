@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/login")
 public class LoginController {
 
-    private Logger logger = Logger.getLogger(LoginController.class);
-    private LoginService loginService;
+    private final Logger logger = Logger.getLogger(LoginController.class);
+    private final LoginService loginService;
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -42,7 +42,7 @@ public class LoginController {
 
     @PostMapping("/addUser")
     public String addUser(LoginForm loginForm){
-        if(loginForm.getUsername() != "" && loginForm.getPassword() != ""){
+        if(loginForm.getUsername().equals("") && loginForm.getPassword().equals("")){
             loginService.addUser(loginForm);
             logger.info("user added successfully: " + loginForm);
         }else{
@@ -53,7 +53,7 @@ public class LoginController {
 
     @PostMapping("/removeUser")
     public String removeUser(@RequestParam(value = "usernameToRemove") String usernameToRemove){
-        if( usernameToRemove != "") {
+        if( usernameToRemove.equals("")) {
             loginService.deleteUser(usernameToRemove);
             logger.info("deleted user with the name " + usernameToRemove);
         }else{

@@ -2,9 +2,9 @@ package org.example.app.exceptions;
 
 public class NonexistentBookException extends Exception{
 
-    private String attribute;
+    private final String attribute;
 
-    private String message;
+    private final String message;
 
     public NonexistentBookException(String attribute , String message){
         this.attribute = attribute;

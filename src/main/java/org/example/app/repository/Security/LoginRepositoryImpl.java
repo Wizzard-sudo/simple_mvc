@@ -60,22 +60,19 @@ public class LoginRepositoryImpl implements LoginRepository {
     }
 
     @Override
-    public boolean addUser(LoginForm user) {
+    public void addUser(LoginForm user) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("username", user.getUsername());
         parameterSource.addValue("password", user.getPassword());
         parameterSource.addValue("role", user.getRole());
-        jdbcTemplate.update("INSERT INTO users(username, password, role) VALUES(:username, :password, :role)", parameterSource);
-        logger.info("new user added:" + user);
-        return true;
+        int flag = jdbcTemplate.update("INSERT INTO users(username, password, role) VALUES(:username, :password, :role)", parameterSource);
     }
 
     @Override
     public boolean removeUserByName(String userNameToRemove) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("username", userNameToRemove);
-        jdbcTemplate.update("DELETE FROM users WHERE username = :username", parameterSource);
-        logger.info("remove user completed");
-        return true;
+        int flag = jdbcTemplate.update("DELETE FROM users WHERE username = :username", parameterSource);
+        return (flag != 0);
     }
 }
