@@ -1,4 +1,4 @@
-package org.example.app.repository.File;
+package org.example.app.repository;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;

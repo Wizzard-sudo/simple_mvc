@@ -1,4 +1,4 @@
-package org.example.app.config;
+package org.example.app.config.security;
 
 import org.apache.log4j.Logger;
 
@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-//TODO положите это в пакет security
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {

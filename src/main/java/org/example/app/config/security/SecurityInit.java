@@ -1,7 +1,6 @@
-package org.example.app.config;
+package org.example.app.config.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-//TODO и это тоже положите в пакет security :)
 public class SecurityInit extends AbstractSecurityWebApplicationInitializer {
 }

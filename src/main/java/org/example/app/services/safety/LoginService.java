@@ -1,6 +1,6 @@
-package org.example.app.services.Security;
+package org.example.app.services.safety;
 
-import org.example.app.repository.Security.LoginRepository;
+import org.example.app.repository.safety.LoginRepository;
 import org.example.web.dto.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +10,10 @@ import java.util.List;
 @Service
 public class LoginService {
 
-    private final LoginRepository<LoginForm> loginRepo;
+    private final LoginRepository loginRepo;
 
     @Autowired
-    public LoginService(LoginRepository<LoginForm> loginRepo) {
+    public LoginService(LoginRepository loginRepo) {
         this.loginRepo = loginRepo;
     }
 

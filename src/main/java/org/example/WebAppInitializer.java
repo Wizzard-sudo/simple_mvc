@@ -5,12 +5,11 @@ import org.example.app.config.AppContextConfig;
 import org.example.web.config.WebContextConfig;
 import org.h2.server.web.WebServlet;
 import org.springframework.web.WebApplicationInitializer;
+
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
@@ -18,7 +17,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     Logger logger = Logger.getLogger(WebAppInitializer.class);
 
     @Override
-    public void onStartup(javax.servlet.ServletContext servletContext) throws ServletException {
+    public void onStartup(javax.servlet.ServletContext servletContext) {
 
         logger.info("loading app-config");
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();

@@ -1,8 +1,8 @@
-package org.example.app.repository.Security;
+package org.example.app.repository.safety;
 
 import org.apache.log4j.Logger;
-import org.example.app.repository.Book.BookRepositoryImpl;
 import org.example.web.dto.LoginForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,11 +15,12 @@ import java.util.List;
 @Repository
 public class LoginRepositoryImpl implements LoginRepository {
 
-    private final Logger logger = Logger.getLogger(BookRepositoryImpl.class);
+    private final Logger logger = Logger.getLogger(LoginRepositoryImpl.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LoginForm rootUser = new LoginForm("root", "123", "user");
     private final List<LoginForm> users = new ArrayList(Arrays.asList(rootUser));
 
+    @Autowired
     public LoginRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

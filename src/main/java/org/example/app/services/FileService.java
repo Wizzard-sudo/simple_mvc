@@ -1,6 +1,6 @@
-package org.example.app.services.File;
+package org.example.app.services;
 
-import org.example.app.repository.File.FileRepositoryImpl;
+import org.example.app.repository.FileRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;

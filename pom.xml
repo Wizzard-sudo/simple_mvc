@@ -10,7 +10,6 @@
   <packaging>war</packaging>
 
   <name>simple_mvc Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <properties>
@@ -62,7 +61,7 @@
       <version>6.2.0.Final</version>
     </dependency>
 
-    <!--Security-->
+    <!--security-->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
@@ -78,7 +77,7 @@
       <artifactId>spring-security-config</artifactId>
       <version>5.0.17.RELEASE</version>
     </dependency>
-    <!--Security-->
+    <!--security-->
 
     <!--Database-->
     <dependency>

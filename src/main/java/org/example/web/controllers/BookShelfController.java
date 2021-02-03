@@ -2,8 +2,8 @@ package org.example.web.controllers;
 
 import org.apache.log4j.Logger;
 import org.example.app.exceptions.NonexistentBookException;
-import org.example.app.services.Book.BookService;
-import org.example.app.services.File.FileService;
+import org.example.app.services.BookService;
+import org.example.app.services.FileService;
 import org.example.web.dto.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
